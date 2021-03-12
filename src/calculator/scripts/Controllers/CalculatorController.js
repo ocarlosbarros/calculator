@@ -14,6 +14,7 @@ class CalculatorController {
         this._hourEl = document.querySelector("#hora");
         this._currentDate = new Date();
         this.initialize();
+        this.initButtonsEvent();
     }
 
     //Getters e Setters
@@ -59,6 +60,33 @@ class CalculatorController {
             year: 'numeric'
         });
         this.hour = this.currentDate.toLocaleTimeString(this.locale);
+    }
+
+    //Own event
+    addEventListenerAll(element, events, fn){
+        //transform string in array using a separator
+        events.split(', ').forEach( event => {
+            element.addEventListener(event, fn, false);
+        });
+    }
+
+    initButtonsEvent(){
+
+        //seleciona os filhos g de #buttons e #parts
+        let buttons = document.querySelectorAll("#buttons > g, #parts > g");
+        
+        buttons.forEach( (btn, index ) => {
+
+            this.addEventListenerAll(btn, 'click, drag', event => {
+                
+                console.log(btn.className.baseVal.replace("btn-", ""));
+            });
+
+            this.addEventListenerAll(btn, 'mouseover, mouseup, mousedown', e => {
+
+                btn.style.cursor = 'pointer';
+            });
+        });
     }
 }//end CalculatorController
 
