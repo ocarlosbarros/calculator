@@ -76,6 +76,8 @@ class CalculatorController {
 
     clearAll(){
         this._operation = [];
+        this._lastNumber = '';
+        this._lastOperator = '';
         this.setLastNumberToDisplay();
     }
 
@@ -191,14 +193,11 @@ class CalculatorController {
             {
                 this.setLastOperation(value);
             }
-            else if ( isNaN(value) ){
-
-                }
-                else
-                    {
-                        this.pushOperation(value);
-                        this.setLastNumberToDisplay();
-                    }
+            else
+            {
+                this.pushOperation(value);
+                this.setLastNumberToDisplay();
+            }
         }else if ( this.isOperator(value) )
                 {
                     this.pushOperation(value);
@@ -207,7 +206,7 @@ class CalculatorController {
                     {
                     //number
                     let newValue = this.getLastOperation().toString() + value.toString();
-                    this.setLastOperation(parseInt(newValue));
+                    this.setLastOperation(newValue);
 
                     this.setLastNumberToDisplay();
                     }
@@ -216,6 +215,26 @@ class CalculatorController {
     setError(){
         this.display = "Error";
     }
+
+
+    addDot(){
+
+        let lastOperation = this.getLastOperation();
+        
+        if  ( typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1 ) return;
+
+        if  ( this.isOperator(lastOperation) || !lastOperation ){
+
+            this.pushOperation("0.");
+        }
+        else
+            {
+                this.setLastOperation(lastOperation.toString() + '.');
+            }
+        
+        this.setLastNumberToDisplay();
+    }
+
 
     execBtn( valueButton ){
 
@@ -250,7 +269,7 @@ class CalculatorController {
                 break;
 
             case 'ponto':
-                this.addOperation('.');
+                this.addDot();
                 break;
 
             case 'igual':
